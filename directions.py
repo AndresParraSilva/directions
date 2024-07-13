@@ -1,10 +1,12 @@
 import pandas as pd
 import random
 import streamlit as st
+from streamlit_js_eval import streamlit_js_eval
+from streamlit_shortcuts import add_keyboard_shortcuts
 from time import time
 
 
-def on_click(direction):
+def on_click(direction: str) -> None:
     if not state.start:
         state.start = time()
 
@@ -13,6 +15,15 @@ def on_click(direction):
         state.streak += "✅"
     else:
         state.streak += "❌"
+
+
+def has_consecutive_not_nulls(l: list) -> bool:
+    ans = False
+    for i in range(len(l) - 1):
+        if l[i] and l[i + 1]:
+            ans = True
+            break
+    return ans
 
 
 state = st.session_state
@@ -33,6 +44,12 @@ st.write(
 if "progression" not in state:
     state.progression = []
 
+state.width = streamlit_js_eval(
+    js_expressions="window.innerWidth",
+    key="WIDTH",
+    want_output=True,
+)
+
 if "counter" not in state:
     state.counter = 0
     state.answer = ""
@@ -44,7 +61,15 @@ if "counter" not in state:
 if state.streak:
     st.markdown(f"Streak:<br/>{state.streak}", unsafe_allow_html=True)
 else:
-    st.markdown("Time starts when<br/>the first button is pressed", unsafe_allow_html=True)
+    if state.width > 300:
+        st.markdown(
+            "Time starts when the first button is pressed<br />You can use the arrow keys",
+            unsafe_allow_html=True,
+        )
+    else:
+        st.markdown(
+            "Time starts when<br />the first button is pressed", unsafe_allow_html=True
+        )
 
 if state.counter < 10:
     c1, c2, c3 = st.columns(3)
@@ -85,6 +110,14 @@ if state.counter < 10:
     c1, c2, c3 = st.columns(3)
     with c2:
         st.button("⬇️", on_click=on_click, args=("below",), use_container_width=True)
+    add_keyboard_shortcuts(
+        {
+            "ArrowUp": "⬆️",
+            "ArrowLeft": "⬅️⏰",
+            "ArrowRight": "⏰➡️",
+            "ArrowDown": "⬇️",
+        }
+    )
     state.counter += 1
 else:
     ok = state.streak.count("✅")
@@ -103,10 +136,18 @@ else:
         st.write("Progression:")
         df = pd.DataFrame({"Seconds": state.progression})
         st.dataframe(df, hide_index=True)
-        st.line_chart(df)
-    if st.button("Play again"):
+        if has_consecutive_not_nulls(state.progression):
+            st.line_chart(df)
+        else:
+            st.scatter_chart(df)
+    if st.button("Play again" + (" (Home key)" if state.width > 300 else "")):
         del state.counter
         st.rerun()
     st.page_link(
         "https://github.com/AndresParraSilva/directions", label="© Andrés Parra"
+    )
+    add_keyboard_shortcuts(
+        {
+            "Home": "Play again (Home key)",
+        }
     )
