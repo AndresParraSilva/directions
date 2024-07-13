@@ -2,6 +2,7 @@ from streamlit.testing.v1 import AppTest
 from time import time
 from unittest.mock import patch
 
+
 @patch("random.choice")
 def test_one_good_click(random_choice):
     random_choice.return_value = "above"
@@ -11,6 +12,7 @@ def test_one_good_click(random_choice):
     assert at.session_state.answer == "above"
     assert at.session_state.streak == "✅"
     assert at.session_state.pressed == "above"
+
 
 @patch("random.choice")
 def test_one_bad_click(random_choice):
@@ -44,5 +46,8 @@ def test_ten_clicks(test_time, random_choice):
     assert at.session_state.counter == 10
     assert at.session_state.streak == "✅❌❌❌✅✅❌❌❌✅"
     assert not at.exception
-    assert len(at.markdown) == 3
-    assert at.markdown[1].value == f"Results: {4}/{10} ({4 / 10 * 100:.1f}%) in 1.00 seconds"
+    assert len(at.markdown) == 4
+    assert (
+        at.markdown[2].value
+        == f"Results: {4}/{10} ({4 / 10 * 100:.1f}%) in 1.00 seconds"
+    )

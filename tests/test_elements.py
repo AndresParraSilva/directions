@@ -28,6 +28,6 @@ def test_results():
     at.session_state.progression = [10.5, 9.2]
     at.run()
     assert not at.exception
-    assert len(at.markdown) == 3
-    assert at.markdown[1].value.startswith("Results:")
+    assert len(at.markdown) == 4
+    assert at.markdown[2].value.startswith("Results:")
     # assert len(at.line_chart) == 1

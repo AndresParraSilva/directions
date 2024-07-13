@@ -19,6 +19,17 @@ state = st.session_state
 st.header("Directions")
 st.subheader("Press the correct button according to the indication in the center")
 
+st.write(
+    """<style>
+[data-testid="column"] {
+    width: calc(33.3333% - 1rem) !important;
+    flex: 1 1 calc(33.3333% - 1rem) !important;
+    min-width: calc(33% - 1rem) !important;
+}
+</style>""",
+    unsafe_allow_html=True,
+)
+
 if "progression" not in state:
     state.progression = []
 
@@ -46,7 +57,6 @@ if state.counter < 10:
             use_container_width=True,
         )
     with c2:
-        # st.button("above", disabled=True, use_container_width=True)
         state.answer = random.choice(
             [
                 "above",
