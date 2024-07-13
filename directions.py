@@ -42,7 +42,9 @@ if "counter" not in state:
     state.taken = False
 
 if state.streak:
-    st.markdown(f"Streak: {state.streak}")
+    st.markdown(f"Streak:<br/>{state.streak}", unsafe_allow_html=True)
+else:
+    st.markdown("Time starts when<br/>the first button is pressed", unsafe_allow_html=True)
 
 if state.counter < 10:
     c1, c2, c3 = st.columns(3)
