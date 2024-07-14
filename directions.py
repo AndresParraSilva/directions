@@ -61,7 +61,7 @@ if "counter" not in state:
 if state.streak:
     st.markdown(f"Streak:<br/>{state.streak}", unsafe_allow_html=True)
 else:
-    if state.width > 300:
+    if state.width and state.width > 300:
         st.markdown(
             "Time starts when the first button is pressed<br />You can use the arrow keys",
             unsafe_allow_html=True,
