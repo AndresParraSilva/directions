@@ -37,8 +37,6 @@ rpds-py==0.19.0
 six==1.16.0
 smmap==5.0.1
 streamlit==1.36.0
-streamlit-js-eval==0.1.7
-streamlit-shortcuts==0.1.4
 tenacity==8.5.0
 toml==0.10.2
 tomli==2.0.1
